@@ -168,12 +168,41 @@ el.fsBtn.addEventListener('click', async ()=>{
   }catch(e){console.warn(e)}
 });
 
-/* music toggle */
+/* music toggle — جایگزین قبلی */
+const audio = el.bgMusic;
+audio.preload = 'auto';
+audio.volume = 0.85;
+audio.muted = false;
+
+audio.addEventListener('error', (ev)=>{
+  console.error('Audio load error', audio.error, ev);
+  alert('خطا در بارگذاری فایل صوتی. بررسی کن که فایل assets/music.mp3 وجود داشته باشد.');
+});
+
 let musicOn = false;
-el.musicBtn.addEventListener('click', ()=>{
-  if(!el.bgMusic.getAttribute('src')) { alert('فایل music.mp3 در پوشه assets وجود ندارد. اگر می‌خواهی موسیقی باشد آن را اضافه کن.'); return; }
-  if(musicOn){ el.bgMusic.pause(); el.musicBtn.textContent = '♪'; musicOn=false }
-  else{ el.bgMusic.play().catch(()=>{}); el.musicBtn.textContent = '⏸'; musicOn=true }
+el.musicBtn.addEventListener('click', async () => {
+  const src = audio.getAttribute('src');
+  if (!src) {
+    alert('فایل music.mp3 در پوشه assets وجود ندارد. آن را اضافه کن یا مسیر را اصلاح کن.');
+    return;
+  }
+
+  try {
+    // play() ممکن است Promise برگرداند — منتظر باشیم تا شکست یا موفقیت آن مشخص شود
+    const playPromise = audio.play();
+    if (playPromise !== undefined) {
+      await playPromise;
+    }
+    // اگر رسیدیم اینجا یعنی پخش شروع شد
+    musicOn = true;
+    el.musicBtn.textContent = '⏸';
+  } catch (err) {
+    // play() رد شده — معمولاً سیاست‌های autoplay یا خطای CORS/محتوا
+    console.error('Audio play() rejected:', err);
+    alert('مرورگر اجازهٔ پخش صدا را نداد یا خطایی رخ داد. جزئیات در Console.');
+    // برای دیباگ: نمایش کنترل‌ها برای تست دستی
+    audio.setAttribute('controls', '');
+  }
 });
 
 /* accessibility: close modal with Escape */
