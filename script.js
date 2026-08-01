@@ -1,16 +1,24 @@
 /* script.js
    تنظیمات:
-   - اگر می‌خواهید تاریخ عمل و تاریخ بهبودی را مشخص کنید، مقدار surgeryDate و recoveryDate را تغییر دهید.
-   - فرمت: new Date('2026-08-20T09:00:00') یا می‌توانید از new Date() و setDate استفاده کنید.
+   - تاریخ عمل و تاریخ بهبودی در همین فایل تنظیم شده‌اند.
+   - رفتار:
+     * قبل از عمل -> شمارش معکوس تا عمل
+     * بعد از عمل تا بهبودی -> شمارش معکوس تا بهبودی + نوار پیشرفت
+     * بعد از بهبودی -> نمایش پیام تکمیل و نوار 100%
 */
 
 /* ========== تنظیم تاریخ ========== */
-/* مثال: اگر عمل قبلاً انجام شده، surgeryDate باید تاریخ عمل باشد. */
-const surgeryDate = new Date(); // به طور پیش‌فرض: همین الان (قابل تغییر)
-const recoveryDate = new Date(); recoveryDate.setDate(recoveryDate.getDate() + 19); // به طور پیش‌فرض: 19 روز بعد
+/* تاریخ عمل: 9 آگوست 2026 ساعت 09:00 (فرمت ISO) */
+const surgeryDate = new Date('2026-08-09T08:08:08');
+
+/* تاریخ بهبودی: دقیقاً 6 ماه بعد از تاریخ عمل */
+const recoveryDate = new Date(surgeryDate);
+recoveryDate.setMonth(recoveryDate.getMonth() + 6);
 
 /* ========== المنت‌ها ========== */
 const el = {
+  title: document.querySelector('.title'),
+  subtitle: document.querySelector('.subtitle'),
   days: document.getElementById('days'),
   hours: document.getElementById('hours'),
   minutes: document.getElementById('minutes'),
@@ -40,56 +48,89 @@ function calcPercent(now, start, end){
 function animateDigits(elm, value){
   const old = elm.textContent;
   if(old === value) return;
-  // create a temporary span to animate
   const span = document.createElement('span');
   span.className = 'flip';
   span.textContent = value;
-  // clear and append
   elm.textContent = '';
   elm.appendChild(span);
-  // when animation ends, set plain text
   span.addEventListener('animationend', ()=>{
     elm.textContent = value;
   }, {once:true});
 }
 
-/* update loop */
+/* update loop with phases */
 function update(){
   const now = new Date();
-  const totalMs = recoveryDate - surgeryDate;
-  const remainingMs = recoveryDate - now;
-  const elapsedPercent = calcPercent(now, surgeryDate, recoveryDate);
 
-  // compute days/hours/min/sec remaining (clamped at 0)
-  const ms = Math.max(0, remainingMs);
-  const days = Math.floor(ms / (1000*60*60*24));
-  const hours = Math.floor(ms / (1000*60*60) % 24);
-  const minutes = Math.floor(ms / (1000*60) % 60);
-  const seconds = Math.floor(ms / 1000 % 60);
+  if(now < surgeryDate){
+    // Pre-surgery: countdown to surgery
+    const ms = Math.max(0, surgeryDate - now);
+    const days = Math.floor(ms / (1000*60*60*24));
+    const hours = Math.floor(ms / (1000*60*60) % 24);
+    const minutes = Math.floor(ms / (1000*60) % 60);
+    const seconds = Math.floor(ms / 1000 % 60);
 
-  el.days.textContent = pad(days);
-  el.hours.textContent = pad(hours);
-  el.minutes.textContent = pad(minutes);
-  // animate seconds with flip
-  animateDigits(el.seconds, pad(seconds));
+    el.title.textContent = '🔪Time Remaining Until Mahaks Nose Replacement🩸';
+    el.subtitle.textContent = '✨Forward to a better nose and beyond⚡️';
+    el.days.textContent = pad(days);
+    el.hours.textContent = pad(hours);
+    el.minutes.textContent = pad(minutes);
+    animateDigits(el.seconds, pad(seconds));
 
-  // progress bar
-  el.progressBar.style.width = `${elapsedPercent.toFixed(1)}%`;
-  el.progressPercent.textContent = `${Math.round(elapsedPercent)}%`;
+    // progress: قبل از عمل نوار را صفر نشان می‌دهیم
+    el.progressBar.style.width = `0%`;
+    el.progressPercent.textContent = `0%`;
 
-  // small meta text
-  const remainingStr = `${days} روز • ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-  el.countdownUntil.textContent = remainingStr;
+    el.countdownUntil.textContent = `${days} روز • ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    el.motivText.textContent = "☘️ wish you best 🤍";
 
-  // motivational text change near end
-  if(elapsedPercent >= 90) el.motivText.textContent = "تقریباً تا لبخندت آماده‌ای! 🤍";
-  else if(elapsedPercent >= 50) el.motivText.textContent = "نیمی از راه را آمده‌ای — عالیه!";
-  else el.motivText.textContent = "هر طلوع خورشید، یک قدم نزدیک‌تر. 🤍";
+  } else if(now >= surgeryDate && now < recoveryDate){
+    // Between surgery and recovery: countdown to recovery + progress
+    const ms = Math.max(0, recoveryDate - now);
+    const days = Math.floor(ms / (1000*60*60*24));
+    const hours = Math.floor(ms / (1000*60*60) % 24);
+    const minutes = Math.floor(ms / (1000*60) % 60);
+    const seconds = Math.floor(ms / 1000 % 60);
+
+    el.title.textContent = 'Time Until Recovery';
+    el.subtitle.textContent = 'You are stronger than you know';
+    el.days.textContent = pad(days);
+    el.hours.textContent = pad(hours);
+    el.minutes.textContent = pad(minutes);
+    animateDigits(el.seconds, pad(seconds));
+
+    const elapsedPercent = calcPercent(now, surgeryDate, recoveryDate);
+    el.progressBar.style.width = `${elapsedPercent.toFixed(1)}%`;
+    el.progressPercent.textContent = `${Math.round(elapsedPercent)}%`;
+
+    el.countdownUntil.textContent = `${days} days • ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+
+    if(elapsedPercent >= 90) el.motivText.textContent = "تقریباً تا لبخندت آماده‌ای! 🤍";
+    else if(elapsedPercent >= 50) el.motivText.textContent = "نیمی از راه را آمده‌ای — عالیه!";
+    else el.motivText.textContent = "هر طلوع خورشید، یک قدم نزدیک‌تر. 🤍";
+
+  } else {
+    // After recovery: completed
+    el.title.textContent = 'Recovery Complete';
+    el.subtitle.textContent = 'now we can celebrate. You can breathe now. ';
+    el.days.textContent = pad(0);
+    el.hours.textContent = pad(0);
+    el.minutes.textContent = pad(0);
+    animateDigits(el.seconds, pad(0));
+
+    el.progressBar.style.width = `100%`;
+    el.progressPercent.textContent = `100%`;
+
+    el.countdownUntil.textContent = `0 روز • 00:00:00`;
+    el.motivText.textContent = "تبریک! ریکاوری کامل شد — به خودت افتخار کن. 💙";
+  }
 }
 
 /* start updates */
 update();
 setInterval(update, 900); // ~ هر 0.9 ثانیه
+
+/* بقیه دکمه‌ها (مثل قبل) */
 
 /* buttons: share */
 el.shareBtn.addEventListener('click', async ()=>{
@@ -114,7 +155,6 @@ el.shareBtn.addEventListener('click', async ()=>{
 /* QR modal */
 el.qrBtn.addEventListener('click', ()=>{
   const url = encodeURIComponent(location.href);
-  // use the free qrserver API to generate a QR image
   el.qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${url}`;
   el.qrModal.classList.remove('hidden');
 });
@@ -131,7 +171,7 @@ el.fsBtn.addEventListener('click', async ()=>{
 /* music toggle */
 let musicOn = false;
 el.musicBtn.addEventListener('click', ()=>{
-  if(!el.bgMusic.getAttribute('src')) { alert('فایل music.mp3 در پوشه assets وجود ندارد. اگر می‌خواهید موسیقی باشد آن را اضافه کنید.'); return; }
+  if(!el.bgMusic.getAttribute('src')) { alert('فایل music.mp3 در پوشه assets وجود ندارد. اگر می‌خواهی موسیقی باشد آن را اضافه کن.'); return; }
   if(musicOn){ el.bgMusic.pause(); el.musicBtn.textContent = '♪'; musicOn=false }
   else{ el.bgMusic.play().catch(()=>{}); el.musicBtn.textContent = '⏸'; musicOn=true }
 });
