@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+  <rect rx="10" width="120" height="40" fill="#A8D8FF"/>
+  <g transform="translate(12,8)" fill="#0b2b3a" font-family="Inter, Arial" font-weight="700" font-size="14">
+    <text x="28" y="16">Recovery</text>
+  </g>
+  <circle cx="18" cy="20" r="10" fill="#ffffff" opacity="0.85"/>
+  <path d="M14 20 a4 4 0 1 0 8 0 a4 4 0 1 0 -8 0" fill="#7ec8ff" opacity="0.95"/>
+</svg>

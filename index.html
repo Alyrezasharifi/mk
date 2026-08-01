@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Countdown — Recovery</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Inter for english text (google) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <img src="assets/logo.svg" alt="logo" class="logo" />
+      <div class="controls">
+        <button id="shareBtn" title="اشتراک‌گذاری">اشتراک</button>
+        <button id="qrBtn" title="QR Code">QR</button>
+        <button id="fsBtn" title="تمام صفحه">⤢</button>
+        <button id="musicBtn" title="پخش/توقف موسیقی">♪</button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="bg-clouds"></div>
+      <div class="card glass">
+        <div class="card-left">
+          <h2 class="title">Time Until Recovery</h2>
+          <p class="subtitle">هر روز یک قدم نزدیک‌تر به لبخندت</p>
+
+          <div class="countdown" aria-live="polite">
+            <div class="unit">
+              <div class="label">روز</div>
+              <div class="digits" id="days">00</div>
+            </div>
+            <div class="separator">:</div>
+            <div class="unit">
+              <div class="label">ساعت</div>
+              <div class="digits" id="hours">00</div>
+            </div>
+            <div class="separator">:</div>
+            <div class="unit">
+              <div class="label">دقیقه</div>
+              <div class="digits" id="minutes">00</div>
+            </div>
+            <div class="separator">:</div>
+            <div class="unit">
+              <div class="label">ثانیه</div>
+              <div class="digits flipwrap" id="seconds">00</div>
+            </div>
+          </div>
+
+          <div class="progress-wrap">
+            <div class="progress-info">
+              <div class="progress-text">Recovery Progress</div>
+              <div class="progress-percent" id="progressPercent">0%</div>
+            </div>
+            <div class="progress">
+              <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <p class="footer-text" id="motivText">One day closer. One smile brighter. 🤍</p>
+        </div>
+
+        <div class="card-right">
+          <!-- SVG girl -->
+          <img src="assets/curly-girl.svg" alt="Curly girl illustration" class="curly" />
+        </div>
+      </div>
+
+      <footer class="meta">
+        <div class="meta-left">
+          <small id="countdownUntil">19 Days • 12:41:09</small>
+        </div>
+        <div class="meta-right">
+          <small>بدون نیاز به سرور — آماده انتشار روی GitHub Pages</small>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <!-- hidden audio -->
+  <audio id="bgMusic" src="assets/music.mp3" loop crossorigin="anonymous"></audio>
+
+  <!-- QR modal -->
+  <div id="qrModal" class="modal hidden">
+    <div class="modal-inner glass">
+      <button class="close" id="qrClose">✕</button>
+      <h3>QR برای اشتراک لینک</h3>
+      <img id="qrImg" alt="QR code" src="" />
+      <p class="small">می‌توانید این تصویر را ذخیره کنید یا اسکن کنید.</p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
