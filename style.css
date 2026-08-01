@@ -1,10 +1,10 @@
 :root{
-  --bg:#A8D8FF;
-  --ice:#EAF7FF;
-  --silver:#F4F4F4;
-  --glass-bg: rgba(255,255,255,0.65);
+  --bg:#3397C2;
+  --ice:#3397C2;
+  --silver:#3397C2;
+  --glass-bg: rgba(51,151,194,0.40);
   --glass-border: rgba(255,255,255,0.6);
-  --accent: #7EC8FF;
+  --accent: #3397C2;
   --text:#0b2b3a;
   --shadow: 0 8px 24px rgba(5,20,30,0.12);
   --glass-blur: 10px;
@@ -16,7 +16,7 @@
 html,body{height:100%}
 body{
   margin:0;
-  background: linear-gradient(180deg,var(--ice), #ffffff 60%);
+  background: linear-gradient(180deg,var(--ice), #ffffff 80%);
   color:var(--text);
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
@@ -95,7 +95,7 @@ body{
 .footer-text{margin-top:14px;color:#3b5;font-size:15px}
 
 /* curly girl */
-.curly{width:220px;max-width:100%}
+.curly{width:260px;max-width:100%}
 
 /* modal */
 .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,20,30,0.3);z-index:40}
