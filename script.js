@@ -105,14 +105,14 @@ function update(){
 
     el.countdownUntil.textContent = `${days} days • ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 
-    if(elapsedPercent >= 90) el.motivText.textContent = "تقریباً تا لبخندت آماده‌ای! 🤍";
+    if(elapsedPercent >= 90) el.motivText.textContent = " )تقریباً تا لبخندت آماده‌ای! 🤍";
     else if(elapsedPercent >= 50) el.motivText.textContent = "نیمی از راه را آمده‌ای — عالیه!";
-    else el.motivText.textContent = "هر طلوع خورشید، یک قدم نزدیک‌تر. 🤍";
+    else el.motivText.textContent = "like fucking movies. 🤍";
 
   } else {
     // After recovery: completed
     el.title.textContent = 'Recovery Complete';
-    el.subtitle.textContent = 'now we can celebrate. You can breathe now. ';
+    el.subtitle.textContent = 'now we can celebrate. You can breathe now. (there is no we.) ';
     el.days.textContent = pad(0);
     el.hours.textContent = pad(0);
     el.minutes.textContent = pad(0);
